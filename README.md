@@ -2,6 +2,7 @@
 Simple bootstrapper to find and connect to other automate clients 
 This allows you to discovery new data sources, emphasizing mqtt (at least at beginning)
 
+~~~~
 bootstrapper serve -f path-to-data-folder	# all content gets saved in path-to-folder 
 bootstrapper use-admit admit.sh 		# all additions go through this, and this script can simply reject stuff
 
@@ -39,3 +40,4 @@ bootstrapper use some-server
 bootstrapper get room1/humidity (or -s some-server) --tag=hello
 bootstrapper set myresourcename 'data in here' --tag=sometag (no tag is default)
 
+~~~~
