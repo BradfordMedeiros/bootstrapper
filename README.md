@@ -41,3 +41,10 @@ bootstrapper get room1/humidity (or -s some-server) --tag=hello
 bootstrapper set myresourcename 'data in here' --tag=sometag (no tag is default)
 
 ~~~~
+
+
+automate implementation (what this will enable for automate)
+~~~~
+hippo share-all  # makes sure a broker exists, and shares topics
+hippo connect brokerurl /subpath 	# connect to a broker, puts all topics on the subpath 
+~~~~
