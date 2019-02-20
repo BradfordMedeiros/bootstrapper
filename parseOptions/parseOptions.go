@@ -74,6 +74,10 @@ func ParseOptions(args []string) (Options, error) {
 			useCommand, err := parseUseCommand(commandArgs)
 			return Options{ CommandType: "use", CommandUse: &useCommand}, err
 		}
+		case "download" : {
+			downloadCommand, err := parseDownloadCommand(commandArgs)
+			return Options{ CommandType: "download", CommandDownload: &downloadCommand }, err
+		}
 	}
 	return Options{}, errors.New("invalid type")
 }

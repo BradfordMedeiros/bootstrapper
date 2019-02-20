@@ -5,6 +5,7 @@ import "os"
 import "./parseOptions"
 import "./commands/serve"
 import "./commands/remoteServer"
+import "./commands/download"
 
 func main(){
 	fmt.Println("hello world")
@@ -22,12 +23,11 @@ func main(){
 			if options.CommandUse.ServerUrl == nil {
 				remoteServer.GetServer()
 			}else{
-				serverUrl := "some test url"
-				remoteServer.SetServer(serverUrl)
+				remoteServer.SetServer(*options.CommandUse.ServerUrl)
 			}
 		}
 		case "download": {
-			fmt.Println("download not yet implemented")
+			download.Download()
 		}
 		case "get": {
 			fmt.Println("get placeholder")
