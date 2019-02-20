@@ -1,6 +1,7 @@
 package parseOptions
 
 import "errors"
+import "fmt"
 
 type Options struct {
 	CommandType string
@@ -12,7 +13,7 @@ type Options struct {
 }
 type GetCommand struct {
 	Key string
-	Tag string
+	Tag *string
 }
 type SetCommand struct {
 	Key string
@@ -26,10 +27,14 @@ type UseCommand struct {
 type ServeCommand struct {}
 
 func parseGetCommand (args []string) (GetCommand, error) {
-	return GetCommand{ Key: "default key" }, nil
+	var tag *string = nil
+	if len(args) >= 2 {
+		tag = &args[1]
+	} 
+	return GetCommand{ Key: args[0], Tag: tag }, nil
 }
 func parseSetCommand (args []string) (SetCommand, error) {
-	return SetCommand{}, nil
+	return SetCommand{ Key: args[0], Value: args[1] }, nil
 }
 func parseDownloadCommand(args []string) (DownloadCommand, error){
 	return DownloadCommand{}, nil
@@ -46,17 +51,42 @@ func ParseOptions(args []string) (Options, error) {
 		return Options{}, errors.New("no args")
 	}
 
-	firstArg := args[0]
-	switch(firstArg) {
+	command := args[0]
+	commandArgs := args[1:]
+	switch(command) {
 		case "get" : {
-			getCommand, err := parseGetCommand(args[1:])
+			getCommand, err := parseGetCommand(commandArgs)
 			return Options{ CommandType: "get", CommandGet: &getCommand }, err
 		}
 		case "set": {
-			setCommand, err := parseSetCommand(args[1:])
+			setCommand, err := parseSetCommand(commandArgs)
 			return Options{ CommandType: "set", CommandSet: &setCommand }, err
+		}
+		case "serve": {
+			serveCommand, err := parseServeCommand(commandArgs)
+			return Options{ CommandType: "serve", CommandServe: &serveCommand}, err
 		}
 	}
 	return Options{}, errors.New("invalid type")
 }
 
+func PrintOptions(opts Options){
+	switch(opts.CommandType) {
+		case "get": {
+			fmt.Println(opts.CommandGet.Key, " ", opts.CommandGet.Tag)
+			break;
+		}
+		case "set": {
+			fmt.Println(*opts.CommandSet)
+			break;
+		}
+		case "serve" : {
+			fmt.Println(*opts.CommandServe)
+			break;
+		}
+		default : { 
+			fmt.Println("cannot print ", opts.CommandType)
+
+		}
+	}
+}
