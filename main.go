@@ -4,6 +4,7 @@ import "fmt"
 import "os"
 import "./parseOptions"
 import "./commands/serve"
+import "./commands/remoteServer"
 
 func main(){
 	fmt.Println("hello world")
@@ -18,7 +19,12 @@ func main(){
 			serve.Start()
 		}
 		case "use": {
-			fmt.Println("use not yet implemented")
+			if options.CommandUse.ServerUrl == nil {
+				remoteServer.GetServer()
+			}else{
+				serverUrl := "some test url"
+				remoteServer.SetServer(serverUrl)
+			}
 		}
 		case "download": {
 			fmt.Println("download not yet implemented")

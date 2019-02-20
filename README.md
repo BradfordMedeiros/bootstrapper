@@ -39,6 +39,7 @@ Client functions:
 bootstrapper use some-server 
 bootstrapper download some-server
 bootstrapper use some-server
+bootstrapper info some-server  # gets info on current server
 bootstrapper get room1/humidity (or -s some-server) --tag=hello
 bootstrapper set myresourcename 'data in here' --tag=sometag 
 

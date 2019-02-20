@@ -22,7 +22,7 @@ type SetCommand struct {
 }
 type DownloadCommand struct {}
 type UseCommand struct {
-	serverUrl string
+	ServerUrl *string
 }
 type ServeCommand struct {}
 
@@ -40,7 +40,11 @@ func parseDownloadCommand(args []string) (DownloadCommand, error){
 	return DownloadCommand{}, nil
 }
 func parseUseCommand(args []string) (UseCommand, error){
-	return UseCommand{}, nil
+	var serverUrl *string = nil
+	if len(args) >= 2{		
+		serverUrl = &args[1]
+	}
+	return UseCommand{ ServerUrl: serverUrl }, nil
 }
 func parseServeCommand(args []string) (ServeCommand, error){
 	return ServeCommand{}, nil
@@ -65,6 +69,10 @@ func ParseOptions(args []string) (Options, error) {
 		case "serve": {
 			serveCommand, err := parseServeCommand(commandArgs)
 			return Options{ CommandType: "serve", CommandServe: &serveCommand}, err
+		}
+		case "use": {
+			useCommand, err := parseUseCommand(commandArgs)
+			return Options{ CommandType: "use", CommandUse: &useCommand}, err
 		}
 	}
 	return Options{}, errors.New("invalid type")
