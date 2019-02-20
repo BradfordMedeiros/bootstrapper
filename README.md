@@ -2,6 +2,7 @@
 Simple bootstrapper to find and connect to other automate clients 
 This allows you to discovery new data sources, emphasizing mqtt (at least at beginning)
 
+Server functions
 ~~~~
 bootstrapper serve -f path-to-data-folder	# all content gets saved in path-to-folder 
 bootstrapper use-admit admit.sh 		# all additions go through this, and this script can simply reject stuff
@@ -34,11 +35,12 @@ data-folder/
 				
 
 
+Client functions:
 bootstrapper use some-server 
 bootstrapper download some-server
 bootstrapper use some-server
 bootstrapper get room1/humidity (or -s some-server) --tag=hello
-bootstrapper set myresourcename 'data in here' --tag=sometag (no tag is default)
+bootstrapper set myresourcename 'data in here' --tag=sometag 
 
 ~~~~
 
@@ -48,3 +50,10 @@ automate implementation (what this will enable for automate)
 hippo share-all  # makes sure a broker exists, and shares topics
 hippo connect brokerurl /subpath 	# connect to a broker, puts all topics on the subpath 
 ~~~~
+
+
+so for example we might do:
+bootstrapper get all --tag=mqtt 
+bootstrapper set brad/temperature --tag=mqtt 
+bootstrapper download 
+
