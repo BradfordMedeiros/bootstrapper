@@ -41,8 +41,8 @@ func parseDownloadCommand(args []string) (DownloadCommand, error){
 }
 func parseUseCommand(args []string) (UseCommand, error){
 	var serverUrl *string = nil
-	if len(args) >= 2{		
-		serverUrl = &args[1]
+	if len(args) >= 1{		
+		serverUrl = &args[0]
 	}
 	return UseCommand{ ServerUrl: serverUrl }, nil
 }

@@ -4,9 +4,8 @@ import "fmt"
 import "os"
 import "./parseOptions"
 import "./commands/serve"
-import "./commands/remoteServer"
 import "./commands/download"
-import "./readConfig"
+import "./config"
 
 func main(){
 	fmt.Println("hello world")
@@ -15,12 +14,10 @@ func main(){
 		fmt.Println("error! ", err)
 	}
 
-	config, err := readConfig.ReadConfig("./config")
+	configuration, err := config.Read("./data")
 	if err != nil {
 		panic("Could not read config: " + err.Error())
 	}
-
-	fmt.Println("config is: ", config)
 
 	switch (options.CommandType) {
 		case "serve": { 
@@ -28,9 +25,16 @@ func main(){
 		}
 		case "use": {
 			if options.CommandUse.ServerUrl == nil {
-				remoteServer.GetServer()
+				fmt.Println(configuration.RemoteServer)
 			}else{
-				remoteServer.SetServer(*options.CommandUse.ServerUrl)
+				fmt.Println("trying to write new server url")
+				configToWrite := config.Config{
+					RemoteServer: *options.CommandUse.ServerUrl,
+				}
+				writeErr := config.Write(configToWrite)
+				if writeErr != nil {
+					panic ("Could not write config " + writeErr.Error())
+				}
 			}
 		}
 		case "download": {
