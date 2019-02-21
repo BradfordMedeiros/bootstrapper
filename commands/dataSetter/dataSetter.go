@@ -49,7 +49,7 @@ func Set(topic string, data string) (string, error){
 	if err != nil {
 		return "", err
 	}
-	return httpPost("http://localhost:8000/set", bytes)
+	return httpPost("http://localhost:8001/set", bytes)
 }
 
 func Get(topic string) (string, error){
@@ -64,13 +64,13 @@ func Get(topic string) (string, error){
 	if err != nil {
 		return "", err
 	}
-	return httpPost("http://localhost:8000/get", bytes)
+	return httpPost("http://localhost:8001/get", bytes)
 }
 
 func Banner() (string, error) {
-	return httpGet("http://localhost:8000/banner")
+	return httpGet("http://localhost:8001/banner")
 }
 
 func Info() (string, error) {
-	return httpGet("http://localhost:8000/info")
+	return httpGet("http://localhost:8001/info")
 }

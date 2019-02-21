@@ -22,7 +22,7 @@ func main(){
 	switch (options.CommandType) {
 		// Server commands
 		case "serve": { 		
-			serve.Start()
+			serve.Start(configuration.Banner)
 		}
 
 		// Client commands
@@ -44,7 +44,7 @@ func main(){
 			download.Download()
 		}
 		case "get": {
-			resp, err := dataSetter.Get("some topic")
+			resp, err := dataSetter.Get("some topic ")
 			if err != nil {
 				fmt.Println("error getting ", err.Error())
 				return

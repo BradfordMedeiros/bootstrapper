@@ -19,7 +19,7 @@ import "net/http"
 import "strconv"
 import "encoding/json"
 
-const PORT = 8000 
+const PORT = 8001
 
 type SetRequest struct {
 	Topic string `json:"topic"`
@@ -47,11 +47,11 @@ func isValidGetRequest(getReq GetRequest) bool {
 	return true
 }
 
-func Start(){
+func Start(banner string){
 	fmt.Println("bootstrapper server starting")
 	// ideally this could be done without side effects on http module, but not sure if the api call is available
 	http.HandleFunc("/banner", func(w http.ResponseWriter, r *http.Request) {  
-		w.Write([]byte("banner placeholder"))
+		w.Write([]byte(banner))
 	})
 	http.HandleFunc("/info", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("info placeholder"))
@@ -92,5 +92,6 @@ func Start(){
 		w.Write([]byte("data is " + setRequest.Data))
 	})
 
-	http.ListenAndServe(":"+strconv.Itoa(int(PORT)), nil)
+	err := http.ListenAndServe(":"+strconv.Itoa(int(PORT)), nil)
+	fmt.Println("err ", err.Error())
 }

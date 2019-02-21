@@ -1,1 +1,5 @@
-{"remote_server":"default_server"}
+{
+	"remote_server":"soeother",
+	"banner": "Brads bootstrapper server\nShare data here"
+
+}

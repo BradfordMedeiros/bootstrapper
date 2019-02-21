@@ -6,10 +6,14 @@ import "errors"
 
 type Config struct {
 	RemoteServer string `json:"remote_server"`
+	Banner string `json:"banner"`
 }
 
 func isValidConfig(config Config) bool {
 	if config.RemoteServer == "" {
+		return false
+	}
+	if config.Banner == "" {
 		return false
 	}
 	return true
