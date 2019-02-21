@@ -8,7 +8,6 @@ import "./commands/download"
 import "./config"
 
 func main(){
-	fmt.Println("hello world")
 	options, err := parseOptions.ParseOptions(os.Args[1:])
 	if err != nil {
 		fmt.Println("error! ", err)
@@ -47,7 +46,7 @@ func main(){
 			fmt.Println("set placeholder")
 		}
 		default : {
-			fmt.Println("unknown command type")
+			panic("unknown command type")
 		}
 	}
 
