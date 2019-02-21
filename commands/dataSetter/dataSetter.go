@@ -21,7 +21,7 @@ func httpGet(route string) (string, error){
 }
 func httpPost(route string, jsonBytes []byte) (string, error) {
 	jsonContent := bytes.NewReader(jsonBytes)
-	fmt.Println("want to send: ", string(jsonBytes))
+	fmt.Println("sending data: ", string(jsonBytes))
 	resp, err := http.Post(route, "application/json", jsonContent)
 	
 	if err != nil {
@@ -52,9 +52,19 @@ func Set(topic string, data string) (string, error){
 	return httpPost("http://localhost:8000/set", bytes)
 }
 
-func Get() (string, error){
-	jsonBytes := []byte("helloworld")
-	return httpPost("http://localhost:8000/get", jsonBytes)
+func Get(topic string) (string, error){
+	value := struct {
+		Topic string `json:"topic"`
+		Tag string `json:"tag"`
+	}{
+		Topic: topic, 
+		Tag: "some tag",
+	}
+	bytes, err := json.Marshal(value)
+	if err != nil {
+		return "", err
+	}
+	return httpPost("http://localhost:8000/get", bytes)
 }
 
 func Banner() (string, error) {

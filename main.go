@@ -44,7 +44,7 @@ func main(){
 			download.Download()
 		}
 		case "get": {
-			resp, err := dataSetter.Get()
+			resp, err := dataSetter.Get("some topic")
 			if err != nil {
 				fmt.Println("error getting ", err.Error())
 				return
