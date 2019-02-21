@@ -10,6 +10,8 @@ type Options struct {
 	CommandDownload *DownloadCommand
 	CommandUse *UseCommand
 	CommandServe *ServeCommand
+	CommandBanner *BannerCommand
+	CommandInfo *InfoCommand
 }
 type GetCommand struct {
 	Key string
@@ -25,6 +27,8 @@ type UseCommand struct {
 	ServerUrl *string
 }
 type ServeCommand struct {}
+type BannerCommand struct {}
+type InfoCommand struct {}
 
 func parseGetCommand (args []string) (GetCommand, error) {
 	var tag *string = nil
@@ -77,6 +81,12 @@ func ParseOptions(args []string) (Options, error) {
 		case "download" : {
 			downloadCommand, err := parseDownloadCommand(commandArgs)
 			return Options{ CommandType: "download", CommandDownload: &downloadCommand }, err
+		}
+		case "info" :{
+			return Options{ CommandType: "info", CommandInfo: &InfoCommand{}}, nil
+		}
+		case "banner": {
+			return Options{ CommandType: "banner", CommandBanner: &BannerCommand{}}, nil
 		}
 	}
 	return Options{}, errors.New("invalid type")

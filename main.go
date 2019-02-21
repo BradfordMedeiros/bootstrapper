@@ -6,6 +6,7 @@ import "./parseOptions"
 import "./commands/serve"
 import "./commands/download"
 import "./config"
+import "./commands/dataSetter"
 
 func main(){
 	options, err := parseOptions.ParseOptions(os.Args[1:])
@@ -19,10 +20,13 @@ func main(){
 	}
 
 	switch (options.CommandType) {
-		case "serve": { 
+		// Server commands
+		case "serve": { 		
 			serve.Start()
 		}
-		case "use": {
+
+		// Client commands
+		case "use": {		   
 			if options.CommandUse.ServerUrl == nil {
 				fmt.Println(configuration.RemoteServer)
 			}else{
@@ -40,10 +44,26 @@ func main(){
 			download.Download()
 		}
 		case "get": {
-			fmt.Println("get placeholder")
+			dataSetter.Get()
 		}
 		case "set": {
-			fmt.Println("set placeholder")
+			dataSetter.Set()
+		}
+		case "info": {
+			infoResponse, err := dataSetter.Info()
+			if err != nil {
+				fmt.Println("error grabbing info: ", err.Error())
+				return
+			}
+			fmt.Println(infoResponse)
+		}
+		case "banner": {
+			bannerResponse, err := dataSetter.Banner()
+			if err != nil {
+				fmt.Println("error grabbing banenr: ", err.Error())
+				return
+			}
+			fmt.Println(bannerResponse)
 		}
 		default : {
 			panic("unknown command type")
