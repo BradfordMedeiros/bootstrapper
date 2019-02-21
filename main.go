@@ -6,6 +6,7 @@ import "./parseOptions"
 import "./commands/serve"
 import "./commands/remoteServer"
 import "./commands/download"
+import "./readConfig"
 
 func main(){
 	fmt.Println("hello world")
@@ -14,6 +15,12 @@ func main(){
 		fmt.Println("error! ", err)
 	}
 
+	config, err := readConfig.ReadConfig("./config")
+	if err != nil {
+		panic("Could not read config: " + err.Error())
+	}
+
+	fmt.Println("config is: ", config)
 
 	switch (options.CommandType) {
 		case "serve": { 
