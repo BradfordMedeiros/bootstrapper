@@ -52,7 +52,12 @@ func main(){
 			fmt.Println(resp)
 		}
 		case "set": {
-			dataSetter.Set()
+			resp, err := dataSetter.Set("some topic", "some data")
+			if err != nil {
+				fmt.Println("error setting: ", err.Error())
+				return
+			}
+			fmt.Println(resp)
 		}
 		case "info": {
 			infoResponse, err := dataSetter.Info()

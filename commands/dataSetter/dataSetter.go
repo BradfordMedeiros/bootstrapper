@@ -3,6 +3,8 @@ package dataSetter
 import "net/http"
 import "io/ioutil"
 import "bytes" 
+import "encoding/json"
+import "fmt"
 
 // @todo probably should do status codes correctly
 func httpGet(route string) (string, error){
@@ -19,6 +21,7 @@ func httpGet(route string) (string, error){
 }
 func httpPost(route string, jsonBytes []byte) (string, error) {
 	jsonContent := bytes.NewReader(jsonBytes)
+	fmt.Println("want to send: ", string(jsonBytes))
 	resp, err := http.Post(route, "application/json", jsonContent)
 	
 	if err != nil {
@@ -32,9 +35,21 @@ func httpPost(route string, jsonBytes []byte) (string, error) {
 	return string(body), err
 }
 
-func Set() (string, error){
-	jsonBytes := []byte("helloworld")
-	return httpPost("http://localhost:8000/set", jsonBytes)
+func Set(topic string, data string) (string, error){
+	value := struct {
+		Topic string `json:"topic"`
+		Data string `json:"data"`
+		Tag string `json:"tag"`
+	}{
+		Topic: topic,
+		Data: data,
+		Tag: "tag placeholder",
+	}	
+	bytes, err := json.Marshal(value)
+	if err != nil {
+		return "", err
+	}
+	return httpPost("http://localhost:8000/set", bytes)
 }
 
 func Get() (string, error){
