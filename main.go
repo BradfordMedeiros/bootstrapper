@@ -44,7 +44,12 @@ func main(){
 			download.Download()
 		}
 		case "get": {
-			dataSetter.Get()
+			resp, err := dataSetter.Get()
+			if err != nil {
+				fmt.Println("error getting ", err.Error())
+				return
+			}
+			fmt.Println(resp)
 		}
 		case "set": {
 			dataSetter.Set()

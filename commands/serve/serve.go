@@ -69,9 +69,9 @@ func Start(){
 			return
 		}
 
-		w.Write([]byte("good request"))
-		w.Write([]byte("topic is " + getRequest.Topic))
-		w.Write([]byte("tag is " + getRequest.Tag))
+		w.Write([]byte("good request" + "\n"))
+		w.Write([]byte("topic is " + getRequest.Topic + "\n"))
+		w.Write([]byte("tag is " + getRequest.Tag + "\n"))
 	})
 	http.HandleFunc("/set", func(w http.ResponseWriter, r *http.Request) {
 		var setRequest SetRequest
@@ -86,9 +86,9 @@ func Start(){
 			return
 		}
 
-		w.Write([]byte("good request"))
-		w.Write([]byte("topic is " + setRequest.Topic))
-		w.Write([]byte("tag is " + setRequest.Tag))
+		w.Write([]byte("good request" + "\n"))
+		w.Write([]byte("topic is " + setRequest.Topic + "\n"))
+		w.Write([]byte("tag is " + setRequest.Tag + "\n"))
 		w.Write([]byte("data is " + setRequest.Data))
 	})
 
