@@ -1,9 +1,14 @@
 package config
 
+import "path"
 import "io/ioutil"
-import "encoding/json"
-import "errors"
+//import "errors"
 
+/*
+	filebytes, _ := ioutil.ReadFile(filepath)
+	writeErr := ioutil.WriteFile("./data", configuration, 0666)   // This file permission bit seems finicky
+
+*/
 type Config struct {
 	RemoteServer string `json:"remote_server"`
 	Banner string `json:"banner"`
@@ -19,30 +24,45 @@ func isValidConfig(config Config) bool {
 	return true
 }
 
-func Read(filepath string) (Config, error) {
-	filebytes, _ := ioutil.ReadFile(filepath)
-
-	var config Config = Config{}
-	err := json.Unmarshal(filebytes, &config)
-
-	if !isValidConfig(config) {
-		return Config{}, errors.New("invalid configuration")
-	}
-
+func readActiveServer(filepath string) (string, error){
+	filebytes, err := ioutil.ReadFile(filepath)
 	if err != nil {
-		return Config{}, err
+		return "", err
 	}
-	return config, nil
+	return string(filebytes), nil
+}
+func writeActiveServer(filepath string, activeServer string) error {
+	return ioutil.WriteFile(filepath, []byte(activeServer), 0666) 
+}
+func readServers(filepath string) ([]string, error){
+	return []string{}, nil
+}
+func writeServers(filepath string, servers []string) error {
+	return nil
+}
+func readBanner(filepath string) (string, error){
+	filebytes, err := ioutil.ReadFile(filepath)
+	if err != nil {
+		return "", err
+	}
+	return string(filebytes), nil
+}
+func writeBanner(filepath string, banner string) error {
+	return nil
+}
+
+func Read(dataDirectory string) (Config, error) {
+
+	activeServer, _ := readActiveServer(path.Join(dataDirectory, "active_server"))
+	banner, _ := readBanner(path.Join(dataDirectory, "banner"))
+
+	return Config {
+		RemoteServer: activeServer, 
+		Banner: banner,
+	}, nil
 }
 
 func Write(config Config) error {
-	configuration, err := json.Marshal(config)
-	if err != nil {
-		return err
-	}
-	writeErr := ioutil.WriteFile("./data", configuration, 0666)   // This file permission bit seems finicky
-	if writeErr != nil {
-		return writeErr
-	}
+	
 	return nil
 }

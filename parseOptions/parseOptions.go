@@ -7,7 +7,6 @@ type Options struct {
 	CommandType string
 	CommandGet *GetCommand
 	CommandSet *SetCommand
-	CommandDownload *DownloadCommand
 	CommandUse *UseCommand
 	CommandServe *ServeCommand
 	CommandBanner *BannerCommand
@@ -22,7 +21,6 @@ type SetCommand struct {
 	Value string
 	Tag string
 }
-type DownloadCommand struct {}
 type UseCommand struct {
 	ServerUrl *string
 }
@@ -39,9 +37,6 @@ func parseGetCommand (args []string) (GetCommand, error) {
 }
 func parseSetCommand (args []string) (SetCommand, error) {
 	return SetCommand{ Key: args[0], Value: args[1] }, nil
-}
-func parseDownloadCommand(args []string) (DownloadCommand, error){
-	return DownloadCommand{}, nil
 }
 func parseUseCommand(args []string) (UseCommand, error){
 	var serverUrl *string = nil
@@ -77,10 +72,6 @@ func ParseOptions(args []string) (Options, error) {
 		case "use": {
 			useCommand, err := parseUseCommand(commandArgs)
 			return Options{ CommandType: "use", CommandUse: &useCommand}, err
-		}
-		case "download" : {
-			downloadCommand, err := parseDownloadCommand(commandArgs)
-			return Options{ CommandType: "download", CommandDownload: &downloadCommand }, err
 		}
 		case "info" :{
 			return Options{ CommandType: "info", CommandInfo: &InfoCommand{}}, nil

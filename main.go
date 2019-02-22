@@ -4,7 +4,6 @@ import "fmt"
 import "os"
 import "./parseOptions"
 import "./commands/serve"
-import "./commands/download"
 import "./config"
 import "./commands/dataSetter"
 
@@ -41,7 +40,7 @@ func main(){
 					return "some info here"
 				},
 				func () string {
-					return "banner goes here"
+					return configuration.Banner
 				},
 			)
 		}
@@ -60,9 +59,6 @@ func main(){
 					panic ("Could not write config " + writeErr.Error())
 				}
 			}
-		}
-		case "download": {
-			download.Download()
 		}
 		case "set": {
 			resp, err := dataSetter.Set(options.CommandSet.Key, options.CommandSet.Value)
