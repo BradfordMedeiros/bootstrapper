@@ -19,19 +19,29 @@ func main(){
 		panic("Could not read config: " + err.Error())
 	}
 
+	topicMap := map[string]string {}
 	switch (options.CommandType) {
 		// Server commands
 		case "serve": { 		
 			serve.Start(
 				configuration.Banner, 
 				func (topic string, value string, tag string){
-					fmt.Println("save topic: ")
-					fmt.Println("topic: ", topic)
-					fmt.Println("value: ", value)
+					topicMap[topic] = value
 				},
 				func (topic string, tag string) string {
 					fmt.Println("get topic")
-					return "some topic"
+					value, hasKey := topicMap[topic]
+					if !hasKey {
+						return "--- no topic (this is in band for now"
+					}
+
+					return value
+				},
+				func () string {
+					return "some info here"
+				},
+				func () string {
+					return "banner goes here"
 				},
 			)
 		}
@@ -55,7 +65,7 @@ func main(){
 			download.Download()
 		}
 		case "set": {
-			resp, err := dataSetter.Set("some topic", "some data")
+			resp, err := dataSetter.Set(options.CommandSet.Key, options.CommandSet.Value)
 			if err != nil {
 				fmt.Println("error setting: ", err.Error())
 				return
@@ -63,7 +73,7 @@ func main(){
 			fmt.Println(resp)
 		}
 		case "get": {
-			resp, err := dataSetter.Get("some topic ")
+			resp, err := dataSetter.Get(options.CommandGet.Key)
 			if err != nil {
 				fmt.Println("error getting ", err.Error())
 				return
