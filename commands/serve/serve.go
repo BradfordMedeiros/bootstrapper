@@ -51,14 +51,16 @@ func Start(
 	banner string, 
 	saveTopic func (topic string, value string, tag string),
 	getTopic func(topic string, tag string) string,
+	getInfo func() string,
+	getBanner func() string,
 ){
 	fmt.Println("bootstrapper server starting")
 	// ideally this could be done without side effects on http module, but not sure if the api call is available
 	http.HandleFunc("/banner", func(w http.ResponseWriter, r *http.Request) {  
-		w.Write([]byte(banner))
+		w.Write([]byte(getBanner()))
 	})
 	http.HandleFunc("/info", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("info placeholder"))
+		w.Write([]byte(getInfo()))
 	})
 	http.HandleFunc("/get", func(w http.ResponseWriter, r *http.Request) {
 		var getRequest GetRequest
