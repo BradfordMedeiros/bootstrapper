@@ -4,7 +4,6 @@ import "net/http"
 import "io/ioutil"
 import "bytes" 
 import "encoding/json"
-import "fmt"
 
 // @todo probably should do status codes correctly
 func httpGet(route string) (string, error){
@@ -21,7 +20,6 @@ func httpGet(route string) (string, error){
 }
 func httpPost(route string, jsonBytes []byte) (string, error) {
 	jsonContent := bytes.NewReader(jsonBytes)
-	fmt.Println("sending data: ", string(jsonBytes))
 	resp, err := http.Post(route, "application/json", jsonContent)
 	
 	if err != nil {
