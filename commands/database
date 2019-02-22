@@ -1,0 +1,18 @@
+package database
+
+type Database interface {
+	SetValue (topic string, value string)
+	GetValue  (topic string)
+}
+
+type InMemory struct {}
+func (im InMemory) SetValue(topic string, value string){
+
+}
+func (im InMemory) GetValue(topic string){
+
+}
+
+func New() Database {
+	return InMemory{}
+}

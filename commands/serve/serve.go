@@ -47,7 +47,11 @@ func isValidGetRequest(getReq GetRequest) bool {
 	return true
 }
 
-func Start(banner string){
+func Start(
+	banner string, 
+	saveTopic func (topic string, value string, tag string),
+	getTopic func(topic string, tag string) string,
+){
 	fmt.Println("bootstrapper server starting")
 	// ideally this could be done without side effects on http module, but not sure if the api call is available
 	http.HandleFunc("/banner", func(w http.ResponseWriter, r *http.Request) {  
@@ -69,9 +73,8 @@ func Start(banner string){
 			return
 		}
 
-		w.Write([]byte("good request" + "\n"))
-		w.Write([]byte("topic is " + getRequest.Topic + "\n"))
-		w.Write([]byte("tag is " + getRequest.Tag + "\n"))
+		topicData := getTopic(getRequest.Topic, getRequest.Tag)
+		w.Write([]byte(topicData))
 	})
 	http.HandleFunc("/set", func(w http.ResponseWriter, r *http.Request) {
 		var setRequest SetRequest
@@ -86,10 +89,8 @@ func Start(banner string){
 			return
 		}
 
-		w.Write([]byte("good request" + "\n"))
-		w.Write([]byte("topic is " + setRequest.Topic + "\n"))
-		w.Write([]byte("tag is " + setRequest.Tag + "\n"))
-		w.Write([]byte("data is " + setRequest.Data))
+		saveTopic(setRequest.Topic, setRequest.Data, setRequest.Tag)
+		w.Write([]byte("ok"))
 	})
 
 	err := http.ListenAndServe(":"+strconv.Itoa(int(PORT)), nil)

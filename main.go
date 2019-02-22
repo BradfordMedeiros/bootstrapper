@@ -22,7 +22,18 @@ func main(){
 	switch (options.CommandType) {
 		// Server commands
 		case "serve": { 		
-			serve.Start(configuration.Banner)
+			serve.Start(
+				configuration.Banner, 
+				func (topic string, value string, tag string){
+					fmt.Println("save topic: ")
+					fmt.Println("topic: ", topic)
+					fmt.Println("value: ", value)
+				},
+				func (topic string, tag string) string {
+					fmt.Println("get topic")
+					return "some topic"
+				},
+			)
 		}
 
 		// Client commands
@@ -43,18 +54,18 @@ func main(){
 		case "download": {
 			download.Download()
 		}
-		case "get": {
-			resp, err := dataSetter.Get("some topic ")
-			if err != nil {
-				fmt.Println("error getting ", err.Error())
-				return
-			}
-			fmt.Println(resp)
-		}
 		case "set": {
 			resp, err := dataSetter.Set("some topic", "some data")
 			if err != nil {
 				fmt.Println("error setting: ", err.Error())
+				return
+			}
+			fmt.Println(resp)
+		}
+		case "get": {
+			resp, err := dataSetter.Get("some topic ")
+			if err != nil {
+				fmt.Println("error getting ", err.Error())
 				return
 			}
 			fmt.Println(resp)

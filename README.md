@@ -48,13 +48,39 @@ bootstrapper set myresourcename 'data in here' --tag=sometag
 
 automate implementation (what this will enable for automate)
 ~~~~
-hippo share-all  # makes sure a broker exists, and shares topics
-hippo connect brokerurl /subpath 	# connect to a broker, puts all topics on the subpath 
+hippo extensions install bootstrapper
+hippo extensions install auto-joiner
+
+# this basically just creates bootstrapper server with whitelisted ips
+hippo auto-joiner serve --allow-server # then you have to init on the other device
+
+# this connects to the other device
+hippo auto-joiner join ip-of-other-device --topic-map-file / automap
 ~~~~
 
 
 so for example we might do:
 bootstrapper get all --tag=mqtt 
 bootstrapper set brad/temperature --tag=mqtt 
+bootstrapper delete brad/temperature
 bootstrapper download 
 
+Ideas:
+# Server Manipulation
+bootstrapper servers list             # get a list of servers
+bootstrapper servers use someserver   # set active server
+bootstrapper servers active 	      # get name of active server
+bootstrapper servers info             # get info for active server
+bootstrapper servers add someotherserver
+bootstrapper servers rm  someotherserver
+
+# Get information from multiple
+bootstrapper servers use-multi myserver:something,anotherserver:thing
+and then we can query 
+bootstrapper get #/thing/wow/go  and then we can do client side joins here
+
+
+bootstrapper use brads-server
+bootstrapper set brad/data/piano_temp --tag mqtt '{ url: 'someurl }'d
+
+bootstrapper set seattle/lunches
