@@ -14,6 +14,8 @@ func main(){
 	}
 
 	configuration, err := config.Read("./data")
+
+	fmt.Println("servers: ", len(configuration.Servers))
 	if err != nil {
 		panic("Could not read config: " + err.Error())
 	}
