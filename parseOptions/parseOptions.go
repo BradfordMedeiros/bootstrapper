@@ -69,7 +69,7 @@ func ParseOptions(args []string) (Options, error) {
 			serveCommand, err := parseServeCommand(commandArgs)
 			return Options{ CommandType: "serve", CommandServe: &serveCommand}, err
 		}
-		case "use": {
+		case "server": {
 			useCommand, err := parseUseCommand(commandArgs)
 			return Options{ CommandType: "use", CommandUse: &useCommand}, err
 		}
