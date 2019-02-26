@@ -10,6 +10,19 @@ package topics
 
 	This should be matched according to mqtt rules
 */
-func GetMatchTopics(topics []string, matcher string) []string{
-	return []string{}
+
+func isMatchingTopic(topic string, matcher string) bool {
+	return false
+}
+
+func MatchTopics(topics []string, matcher string) []string{
+	matchingTopics := []string{}
+
+	for _, topic := range(topics){
+		if isMatchingTopic(topic, matcher){
+			matchingTopics = append(matchingTopics, topic)
+		}
+	}
+
+	return matchingTopics
 }
