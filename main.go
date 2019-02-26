@@ -7,13 +7,16 @@ import "./commands/serve"
 import "./config"
 import "./commands/dataSetter"
 
+
+const dataDirectory = "./data"
+
 func main(){
 	options, err := parseOptions.ParseOptions(os.Args[1:])
 	if err != nil {
 		fmt.Println("error! ", err)
 	}
 
-	configuration, err := config.Read("./data")
+	configuration, err := config.Read(dataDirectory)
 
 	fmt.Println("servers: ", len(configuration.Servers))
 	if err != nil {
@@ -39,7 +42,7 @@ func main(){
 					return value
 				},
 				func () string {
-					return "some info here"
+					return configuration.Info
 				},
 				func () string {
 					return configuration.Banner
@@ -56,7 +59,7 @@ func main(){
 				configToWrite := config.Config{
 					RemoteServer: *options.CommandUse.ServerUrl,
 				}
-				writeErr := config.Write(configToWrite)
+				writeErr := config.Write(dataDirectory, configToWrite)
 				if writeErr != nil {
 					panic ("Could not write config " + writeErr.Error())
 				}
