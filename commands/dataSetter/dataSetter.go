@@ -4,6 +4,7 @@ import "net/http"
 import "io/ioutil"
 import "bytes" 
 import "encoding/json"
+import "errors"
 
 // @todo probably should do status codes correctly
 func httpGet(route string) (string, error){
@@ -12,6 +13,11 @@ func httpGet(route string) (string, error){
 		return "", err
 	}
 	defer resp.Body.Close()
+	
+	if resp.StatusCode != 200 {
+		return "", errors.New("bad request")
+	}
+
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return "", nil
@@ -26,6 +32,11 @@ func httpPost(route string, jsonBytes []byte) (string, error) {
 		return "", err
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode != 200 {
+		return "", errors.New("bad request")
+	}
+
 	body, readErr := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return "", readErr

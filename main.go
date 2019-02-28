@@ -92,7 +92,7 @@ func main(){
 		case "set": {
 			resp, err := dataSetter.Set(options.CommandSet.Key, options.CommandSet.Value)
 			if err != nil {
-				fmt.Println("error setting: ", err.Error())
+				os.Exit(2)
 				return
 			}
 			fmt.Println(resp)
@@ -100,7 +100,7 @@ func main(){
 		case "get": {
 			resp, err := dataSetter.Get(options.CommandGet.Key)
 			if err != nil {
-				fmt.Println("error getting ", err.Error())
+				os.Exit(2)
 				return
 			}
 			fmt.Println(resp)

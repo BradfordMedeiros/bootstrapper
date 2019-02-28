@@ -107,6 +107,7 @@ func Start(
 		if errSaveTopic == nil {
 			w.Write([]byte("ok"))
 		}else{
+			w.WriteHeader(http.StatusBadRequest)
 			w.Write([]byte("bad"))
 		}
 	})
