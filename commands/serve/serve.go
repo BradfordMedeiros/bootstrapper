@@ -54,12 +54,12 @@ type TopicValuePair struct {
 
 func Start(
 	banner string, 
-	saveTopic func (topic string, value string, tag string),
-	getTopic func(topic string, tag string) []TopicValuePair,
+	saveTopic func (topic string, value string, tag string) error,
+	getTopic func(topic string, tag string) ([]TopicValuePair, error),
 	getInfo func() string,
 	getBanner func() string,
-){
-	fmt.Println("bootstrapper server starting")
+) error {
+	fmt.Println("bootstrapper server starting on port ", PORT)
 	// ideally this could be done without side effects on http module, but not sure if the api call is available
 	http.HandleFunc("/banner", func(w http.ResponseWriter, r *http.Request) {  
 		w.Write([]byte(getBanner()))
@@ -80,7 +80,12 @@ func Start(
 			return
 		}
 
-		topicData := getTopic(getRequest.Topic, getRequest.Tag)
+		topicData, errGetTopic := getTopic(getRequest.Topic, getRequest.Tag)
+		if errGetTopic != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte("bad request"))
+			return
+		}
 		value, _ := json.Marshal(topicData)
 		w.Write(value)
 	})
@@ -93,14 +98,18 @@ func Start(
 			return
 		}
 		if !isValidSetRequest(setRequest){
-			w.Write([]byte("bad validation"))
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte("Malformed request parameters"))
 			return
 		}
 
-		saveTopic(setRequest.Topic, setRequest.Data, setRequest.Tag)
-		w.Write([]byte("ok"))
+		errSaveTopic := saveTopic(setRequest.Topic, setRequest.Data, setRequest.Tag)
+		if errSaveTopic == nil {
+			w.Write([]byte("ok"))
+		}else{
+			w.Write([]byte("bad"))
+		}
 	})
 
-	err := http.ListenAndServe(":"+strconv.Itoa(int(PORT)), nil)
-	fmt.Println("err ", err.Error())
+	return http.ListenAndServe(":"+strconv.Itoa(int(PORT)), nil)
 }

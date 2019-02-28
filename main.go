@@ -2,6 +2,7 @@ package main
 
 import "fmt"
 import "os"
+import "errors"
 import "./parseOptions"
 import "./commands/serve"
 import "./config"
@@ -27,17 +28,16 @@ func main(){
 	switch (options.CommandType) {
 		// Server commands
 		case "serve": { 		
-			serve.Start(
+			err := serve.Start(
 				configuration.Banner, 
-				func (topic string, value string, tag string){
-					if !topics.IsValidTopic(topic) {
-						fmt.Println("invalid topic: ", topic)
-						return
+				func (topic string, value string, tag string) error {
+					if !topics.IsValidTopic(topic){
+						return errors.New("invalid topic " + topic)
 					}
-
 					topicMap[topic] = value
+					return nil
 				},
-				func (topic string, tag string) []serve.TopicValuePair {
+				func (topic string, tag string) ([]serve.TopicValuePair, error) {
 					topicArray := []string{}
 					for topicKey, _ := range topicMap {
 						topicArray = append(topicArray, topicKey)
@@ -60,7 +60,7 @@ func main(){
 							},
 						)
 					}
-					return topicValuePairs
+					return topicValuePairs, nil
 				},
 				func () string {
 					return configuration.Info
@@ -69,6 +69,9 @@ func main(){
 					return configuration.Banner
 				},
 			)
+			if err != nil {
+				panic("error starting server")
+			}
 		}
 
 		// Client commands
