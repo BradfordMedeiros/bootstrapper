@@ -4,6 +4,7 @@ import "fmt"
 import "os"
 import "errors"
 import "./parseOptions"
+import "./serialization"
 import "./commands/serve"
 import "./config"
 import "./commands/httpClient"
@@ -20,11 +21,14 @@ func main(){
 
 	configuration, err := config.Read(dataDirectory)
 
+	getSerializtion := serialization.GetInMemorySerialization
+	saveTopic, getTopics := getSerializtion()
+	
+
 	if err != nil {
 		panic("Could not read config: " + err.Error())
 	}
 
-	topicMap := map[string]string {}
 	switch (options.CommandType) {
 		// Server commands
 		case "serve": { 		
@@ -34,11 +38,13 @@ func main(){
 					if !topics.IsValidTopic(topic){
 						return errors.New("invalid topic " + topic)
 					}
-					topicMap[topic] = value
+					saveTopic(topic, value)
 					return nil
 				},
 				func (topic string, tag string) ([]serve.TopicValuePair, error) {
+					topicMap, _ := getTopics()
 					topicArray := []string{}
+
 					for topicKey, _ := range topicMap {
 						topicArray = append(topicArray, topicKey)
 					}
