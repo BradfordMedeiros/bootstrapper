@@ -6,7 +6,7 @@ import "errors"
 import "./parseOptions"
 import "./commands/serve"
 import "./config"
-import "./commands/dataSetter"
+import "./commands/httpClient"
 import "./commands/topics"
 
 
@@ -90,7 +90,7 @@ func main(){
 			}
 		}
 		case "set": {
-			resp, err := dataSetter.Set(options.CommandSet.Key, options.CommandSet.Value)
+			resp, err := httpClient.Set(options.CommandSet.Key, options.CommandSet.Value)
 			if err != nil {
 				os.Exit(2)
 				return
@@ -98,7 +98,7 @@ func main(){
 			fmt.Println(resp)
 		}
 		case "get": {
-			resp, err := dataSetter.Get(options.CommandGet.Key)
+			resp, err := httpClient.Get(options.CommandGet.Key)
 			if err != nil {
 				os.Exit(2)
 				return
@@ -106,7 +106,7 @@ func main(){
 			fmt.Println(resp)
 		}
 		case "info": {
-			infoResponse, err := dataSetter.Info()
+			infoResponse, err := httpClient.Info()
 			if err != nil {
 				fmt.Println("error grabbing info: ", err.Error())
 				return
@@ -114,7 +114,7 @@ func main(){
 			fmt.Println(infoResponse)
 		}
 		case "banner": {
-			bannerResponse, err := dataSetter.Banner()
+			bannerResponse, err := httpClient.Banner()
 			if err != nil {
 				fmt.Println("error grabbing banenr: ", err.Error())
 				return

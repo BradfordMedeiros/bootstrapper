@@ -1,4 +1,4 @@
-package dataSetter
+package httpClient
 
 import "net/http"
 import "io/ioutil"
