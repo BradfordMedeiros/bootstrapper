@@ -6,6 +6,7 @@ import "./parseOptions"
 import "./commands/serve"
 import "./config"
 import "./commands/dataSetter"
+import "./commands/topics"
 
 
 const dataDirectory = "./data"
@@ -18,7 +19,6 @@ func main(){
 
 	configuration, err := config.Read(dataDirectory)
 
-	fmt.Println("servers: ", len(configuration.Servers))
 	if err != nil {
 		panic("Could not read config: " + err.Error())
 	}
@@ -30,16 +30,37 @@ func main(){
 			serve.Start(
 				configuration.Banner, 
 				func (topic string, value string, tag string){
-					topicMap[topic] = value
-				},
-				func (topic string, tag string) string {
-					fmt.Println("get topic")
-					value, hasKey := topicMap[topic]
-					if !hasKey {
-						return "--- no topic (this is in band for now"
+					if !topics.IsValidTopic(topic) {
+						fmt.Println("invalid topic: ", topic)
+						return
 					}
 
-					return value
+					topicMap[topic] = value
+				},
+				func (topic string, tag string) []serve.TopicValuePair {
+					topicArray := []string{}
+					for topicKey, _ := range topicMap {
+						topicArray = append(topicArray, topicKey)
+					}
+
+					matchingTopics := topics.MatchTopics(topicArray, topic)
+					matchingValues := []string{}
+
+					for _, topic := range(matchingTopics){
+						topicValue, _ := topicMap[topic]
+						matchingValues = append(matchingValues, topicValue)
+					}
+
+					topicValuePairs := []serve.TopicValuePair{}
+					for index, _ := range(matchingTopics){
+						topicValuePairs = append(topicValuePairs, 
+							serve.TopicValuePair{ 
+								Topic: matchingTopics[index],
+								Value: matchingValues[index],
+							},
+						)
+					}
+					return topicValuePairs
 				},
 				func () string {
 					return configuration.Info

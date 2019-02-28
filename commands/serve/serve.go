@@ -47,10 +47,15 @@ func isValidGetRequest(getReq GetRequest) bool {
 	return true
 }
 
+type TopicValuePair struct {
+	Topic string
+	Value string
+}
+
 func Start(
 	banner string, 
 	saveTopic func (topic string, value string, tag string),
-	getTopic func(topic string, tag string) string,
+	getTopic func(topic string, tag string) []TopicValuePair,
 	getInfo func() string,
 	getBanner func() string,
 ){
@@ -76,7 +81,8 @@ func Start(
 		}
 
 		topicData := getTopic(getRequest.Topic, getRequest.Tag)
-		w.Write([]byte(topicData))
+		value, _ := json.Marshal(topicData)
+		w.Write(value)
 	})
 	http.HandleFunc("/set", func(w http.ResponseWriter, r *http.Request) {
 		var setRequest SetRequest
