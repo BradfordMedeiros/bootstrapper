@@ -19,9 +19,6 @@ func main(){
 		fmt.Println("error! ", err)
 	}
 	configuration, err := config.Read(dataDirectory)
-
-	getSerialization := serialization.GetSerialization
-	saveTopic, getTopics := getSerialization("../data/topics")
 	
 	if err != nil {
 		panic("Could not read config: " + err.Error())
@@ -29,7 +26,9 @@ func main(){
 
 	switch (options.CommandType) {
 		// Server commands
-		case "serve": { 		
+		case "serve": { 
+			saveTopic, getTopics := serialization.GetSerialization("./data/topics")		
+			
 			err := serve.Start(
 				configuration.Banner, 
 				func (topic string, value string, tag string) error {

@@ -3,22 +3,6 @@ package serialization
 import "io/ioutil"
 import "encoding/json"
 
-func GetInMemorySerialization(_ string) (
-	SaveTopic func(topic string, value string) error,
-	GetTopics func() (map[string]string, error),
-){
-	topicMap := map[string]string { }
-	saveTopic := func(topic string, value string) error {
-		topicMap[topic] = value
-		return nil
-	}
-	getTopics := func() (topics map[string]string, err error) {
-		return topicMap, nil
-	}
-	return saveTopic, getTopics
-}
-
-
 // map[string][string] is sort of horeshit since it disallows non-string based numbers stored in json but w/e for now
 func ReadTopicFile(filepath string)(map[string]string, error) {
 	filebytes, err := ioutil.ReadFile(filepath)
