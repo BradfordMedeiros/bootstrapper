@@ -3,13 +3,7 @@ package config
 import "path"
 import "io/ioutil"
 import "strings"
-//import "errors"
 
-/*
-	filebytes, _ := ioutil.ReadFile(filepath)
-	writeErr := ioutil.WriteFile("./data", configuration, 0666)   // This file permission bit seems finicky
-
-*/
 type Config struct {
 	RemoteServer string
 	Banner string

@@ -18,13 +18,11 @@ func main(){
 	if err != nil {
 		fmt.Println("error! ", err)
 	}
-
 	configuration, err := config.Read(dataDirectory)
 
-	getSerializtion := serialization.GetInMemorySerialization
-	saveTopic, getTopics := getSerializtion()
+	getSerialization := serialization.GetSerialization
+	saveTopic, getTopics := getSerialization("./data/topics")
 	
-
 	if err != nil {
 		panic("Could not read config: " + err.Error())
 	}
