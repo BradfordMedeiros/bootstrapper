@@ -11,7 +11,7 @@ import "./commands/httpClient"
 import "./commands/topics"
 
 
-const dataDirectory = "./data"
+const dataDirectory = "../data"
 
 func main(){
 	options, err := parseOptions.ParseOptions(os.Args[1:])
@@ -21,7 +21,7 @@ func main(){
 	configuration, err := config.Read(dataDirectory)
 
 	getSerialization := serialization.GetSerialization
-	saveTopic, getTopics := getSerialization("./data/topics")
+	saveTopic, getTopics := getSerialization("../data/topics")
 	
 	if err != nil {
 		panic("Could not read config: " + err.Error())

@@ -1,0 +1,16 @@
+<html>
+	Some banner here
+
+	<style>
+		html {
+			background: blue;
+			color: black;
+			font-size: 32px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+	</style>
+
+	<a href="info">info on server</a>
+</html>
