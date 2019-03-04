@@ -26,6 +26,7 @@ type UseCommand struct {
 }
 type ServeCommand struct {
 	TopicFile string
+	RelativeTo string
 }
 type BannerCommand struct {}
 type InfoCommand struct {}
@@ -52,7 +53,12 @@ func parseServeCommand(args []string) (ServeCommand, error){
 	if len(args) >= 1 {
 		topicFile = args[0]
 	}
-	return ServeCommand{ TopicFile: topicFile }, nil
+
+	relativeTo := "/"
+	if len(args) >= 2 {
+		relativeTo = args[1]
+	}
+	return ServeCommand{ TopicFile: topicFile, RelativeTo: relativeTo }, nil
 }
 
 func ParseOptions(args []string) (Options, error) {

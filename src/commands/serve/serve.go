@@ -18,6 +18,7 @@ import "fmt"
 import "net/http"
 import "strconv"
 import "encoding/json"
+import "path"
 
 const PORT = 8001
 
@@ -53,6 +54,7 @@ type TopicValuePair struct {
 }
 
 func Start(
+	relativeURL string,
 	banner string, 
 	saveTopic func (topic string, value string, tag string) error,
 	getTopic func(topic string, tag string) ([]TopicValuePair, error),
@@ -61,13 +63,13 @@ func Start(
 ) error {
 	fmt.Println("bootstrapper server starting on port ", PORT)
 	// ideally this could be done without side effects on http module, but not sure if the api call is available
-	http.HandleFunc("/banner", func(w http.ResponseWriter, r *http.Request) {  
+	http.HandleFunc(path.Join(relativeURL, "/banner"), func(w http.ResponseWriter, r *http.Request) {  
 		w.Write([]byte(getBanner()))
 	})
-	http.HandleFunc("/info", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc(path.Join(relativeURL, "/info"), func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(getInfo()))
 	})
-	http.HandleFunc("/get", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc(path.Join(relativeURL, "/get"), func(w http.ResponseWriter, r *http.Request) {
 		var getRequest GetRequest
 		decoder := json.NewDecoder(r.Body)
 		err := decoder.Decode(&getRequest)
@@ -89,7 +91,7 @@ func Start(
 		value, _ := json.Marshal(topicData)
 		w.Write(value)
 	})
-	http.HandleFunc("/set", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc(path.Join(relativeURL, "/set"), func(w http.ResponseWriter, r *http.Request) {
 		var setRequest SetRequest
 		decoder := json.NewDecoder(r.Body)
 		err := decoder.Decode(&setRequest)

@@ -29,9 +29,11 @@ func main(){
 		case "serve": { 
 			topicFile := options.CommandServe.TopicFile
 			fmt.Println("topic data file is: ", topicFile)
+			fmt.Println("relative url: ", options.CommandServe.RelativeTo)
 			saveTopic, getTopics := serialization.GetSerialization(topicFile)		
 			
 			err := serve.Start(
+				options.CommandServe.RelativeTo,
 				configuration.Banner, 
 				func (topic string, value string, tag string) error {
 					if !topics.IsValidTopic(topic){
