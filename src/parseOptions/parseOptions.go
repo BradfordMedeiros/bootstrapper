@@ -24,7 +24,9 @@ type SetCommand struct {
 type UseCommand struct {
 	ServerUrl *string
 }
-type ServeCommand struct {}
+type ServeCommand struct {
+	TopicFile string
+}
 type BannerCommand struct {}
 type InfoCommand struct {}
 
@@ -40,13 +42,17 @@ func parseSetCommand (args []string) (SetCommand, error) {
 }
 func parseUseCommand(args []string) (UseCommand, error){
 	var serverUrl *string = nil
-	if len(args) >= 1{		
+	if len(args) >= 1 {		
 		serverUrl = &args[0]
 	}
 	return UseCommand{ ServerUrl: serverUrl }, nil
 }
 func parseServeCommand(args []string) (ServeCommand, error){
-	return ServeCommand{}, nil
+	topicFile := "./data/topics"
+	if len(args) >= 1 {
+		topicFile = args[0]
+	}
+	return ServeCommand{ TopicFile: topicFile }, nil
 }
 
 func ParseOptions(args []string) (Options, error) {

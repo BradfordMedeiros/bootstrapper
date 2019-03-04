@@ -27,7 +27,9 @@ func main(){
 	switch (options.CommandType) {
 		// Server commands
 		case "serve": { 
-			saveTopic, getTopics := serialization.GetSerialization("./data/topics")		
+			topicFile := options.CommandServe.TopicFile
+			fmt.Println("topic data file is: ", topicFile)
+			saveTopic, getTopics := serialization.GetSerialization(topicFile)		
 			
 			err := serve.Start(
 				configuration.Banner, 
