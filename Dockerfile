@@ -7,4 +7,4 @@ CMD ["/bin/sh"]
 FROM alpine:latest  
 WORKDIR /app
 COPY --from=0 /app/build /app/
-CMD ["./bootstrapper serve"]  
+CMD ["./bootstrapper", "serve"]  

@@ -7,7 +7,9 @@ bootstrapper:
 clean:
 	rm -rf ./build
 
+publish-docker: docker
+	docker push bradfordmedeiros/bootstrapper:0.1
 docker:
-	docker build -t bootstrapper .
+	docker build -t bradfordmedeiros/bootstrapper:0.1 .
 clean-docker:
 	docker rmi -f bootstrapper

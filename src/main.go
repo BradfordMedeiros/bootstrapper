@@ -11,7 +11,7 @@ import "./commands/httpClient"
 import "./commands/topics"
 
 
-const dataDirectory = "../data"
+const dataDirectory = "./data"
 
 func main(){
 	options, err := parseOptions.ParseOptions(os.Args[1:])
