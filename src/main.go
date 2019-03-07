@@ -10,13 +10,13 @@ import "./config"
 import "./commands/httpClient"
 import "./commands/topics"
 
-
 const dataDirectory = "./data"
 
 func main(){
-	options, err := parseOptions.ParseOptions(os.Args[1:])
+	options, err := parseOptions.ParseArgs(os.Args[1:])
+
 	if err != nil {
-		fmt.Println("error! ", err)
+		os.Exit(1)
 	}
 	serverConfig, err := config.ReadServer(dataDirectory)
 	clientConfig, err := config.ReadClient(dataDirectory)
@@ -28,6 +28,9 @@ func main(){
 	client, _ := httpClient.GetClient(clientConfig.RemoteServer)
 	switch (options.CommandType) {
 		// Server commands
+		case "exit": {
+			os.Exit(1)
+		}
 		case "serve": { 
 			topicFile := options.CommandServe.TopicFile
 			fmt.Println("topic data file is: ", topicFile)
@@ -132,6 +135,5 @@ func main(){
 			panic("unknown command type")
 		}
 	}
-
 }
 
