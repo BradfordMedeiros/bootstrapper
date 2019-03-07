@@ -93,6 +93,8 @@ func info(url string) (string, error) {
 }
 
 
+// @todo handle this url better.
+// Should return error and check url up front
 func GetClient(url string) (HttpClient, error) {
 	client := HttpClient { 
 		Get: func(topic string) (string, error) {
