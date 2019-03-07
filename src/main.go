@@ -18,13 +18,14 @@ func main(){
 	if err != nil {
 		fmt.Println("error! ", err)
 	}
-	configuration, err := config.Read(dataDirectory)
+	serverConfig, err := config.ReadServer(dataDirectory)
+	clientConfig, err := config.ReadClient(dataDirectory)
 	
 	if err != nil {
 		panic("Could not read config: " + err.Error())
 	}
 
-	client, _ := httpClient.GetClient(configuration.RemoteServer)
+	client, _ := httpClient.GetClient(clientConfig.RemoteServer)
 	switch (options.CommandType) {
 		// Server commands
 		case "serve": { 
@@ -35,7 +36,7 @@ func main(){
 			
 			err := serve.Start(
 				options.CommandServe.RelativeTo,
-				configuration.Banner, 
+				serverConfig.Banner, 
 				func (topic string, value string, tag string) error {
 					if !topics.IsValidTopic(topic){
 						return errors.New("invalid topic " + topic)
@@ -71,10 +72,10 @@ func main(){
 					return topicValuePairs, nil
 				},
 				func () string {
-					return configuration.Info
+					return serverConfig.Info
 				},
 				func () string {
-					return configuration.Banner
+					return serverConfig.Banner
 				},
 			)
 			if err != nil {
@@ -85,13 +86,11 @@ func main(){
 		// Client commands
 		case "use": {		   
 			if options.CommandUse.ServerUrl == nil {
-				fmt.Println(configuration.RemoteServer)
+				fmt.Println(clientConfig.RemoteServer)
 			}else{
-				fmt.Println("trying to write new server url")
-				configToWrite := config.Config{
+				writeErr := config.WriteClient(dataDirectory, config.ClientConfig{
 					RemoteServer: *options.CommandUse.ServerUrl,
-				}
-				writeErr := config.Write(dataDirectory, configToWrite)
+				})
 				if writeErr != nil {
 					panic ("Could not write config " + writeErr.Error())
 				}
