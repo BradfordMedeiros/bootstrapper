@@ -97,7 +97,7 @@ func main(){
 			}
 		}
 		case "set": {
-			resp, err := httpClient.Set(options.CommandSet.Key, options.CommandSet.Value)
+			resp, err := httpClient.Set(configuration.RemoteServer, options.CommandSet.Key, options.CommandSet.Value)
 			if err != nil {
 				os.Exit(2)
 				return
@@ -105,7 +105,7 @@ func main(){
 			fmt.Println(resp)
 		}
 		case "get": {
-			resp, err := httpClient.Get(options.CommandGet.Key)
+			resp, err := httpClient.Get(configuration.RemoteServer, options.CommandGet.Key)
 			if err != nil {
 				os.Exit(2)
 				return
@@ -113,7 +113,7 @@ func main(){
 			fmt.Println(resp)
 		}
 		case "info": {
-			infoResponse, err := httpClient.Info()
+			infoResponse, err := httpClient.Info(configuration.RemoteServer)
 			if err != nil {
 				fmt.Println("error grabbing info: ", err.Error())
 				return
@@ -121,7 +121,7 @@ func main(){
 			fmt.Println(infoResponse)
 		}
 		case "banner": {
-			bannerResponse, err := httpClient.Banner()
+			bannerResponse, err := httpClient.Banner(configuration.RemoteServer)
 			if err != nil {
 				fmt.Println("error grabbing banenr: ", err.Error())
 				return

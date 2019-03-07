@@ -44,7 +44,7 @@ func httpPost(route string, jsonBytes []byte) (string, error) {
 	return string(body), err
 }
 
-func Set(topic string, data string) (string, error){
+func Set(url string, topic string, data string) (string, error){
 	value := struct {
 		Topic string `json:"topic"`
 		Data string `json:"data"`
@@ -58,10 +58,10 @@ func Set(topic string, data string) (string, error){
 	if err != nil {
 		return "", err
 	}
-	return httpPost("http://localhost:8001/set", bytes)
+	return httpPost(url + "set", bytes)
 }
 
-func Get(topic string) (string, error){
+func Get(url string, topic string) (string, error){
 	value := struct {
 		Topic string `json:"topic"`
 		Tag string `json:"tag"`
@@ -73,13 +73,14 @@ func Get(topic string) (string, error){
 	if err != nil {
 		return "", err
 	}
-	return httpPost("http://localhost:8001/get", bytes)
+
+	return httpPost(url +"/get", bytes)
 }
 
-func Banner() (string, error) {
-	return httpGet("http://localhost:8001/banner")
+func Banner(url string) (string, error) {
+	return httpGet(url + "/banner")
 }
 
-func Info() (string, error) {
-	return httpGet("http://localhost:8001/info")
+func Info(url string) (string, error) {
+	return httpGet(url + "/info")
 }
