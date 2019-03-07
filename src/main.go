@@ -29,7 +29,7 @@ func main(){
 	switch (options.CommandType) {
 		// Server commands
 		case "exit": {
-			os.Exit(1)
+			os.Exit(0)
 		}
 		case "serve": { 
 			topicFile := options.CommandServe.TopicFile
