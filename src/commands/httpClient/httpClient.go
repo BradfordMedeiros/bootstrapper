@@ -6,6 +6,13 @@ import "bytes"
 import "encoding/json"
 import "errors"
 
+type HttpClient struct {
+	Get func(topic string) (string, error)
+	Set func(topic string, data string) (string, error)
+	Banner func() (string, error)
+	Info func() (string, error) 
+}
+
 // @todo probably should do status codes correctly
 func httpGet(route string) (string, error){
 	resp, err := http.Get(route)
@@ -44,7 +51,7 @@ func httpPost(route string, jsonBytes []byte) (string, error) {
 	return string(body), err
 }
 
-func Set(url string, topic string, data string) (string, error){
+func set(url string, topic string, data string) (string, error){
 	value := struct {
 		Topic string `json:"topic"`
 		Data string `json:"data"`
@@ -58,10 +65,10 @@ func Set(url string, topic string, data string) (string, error){
 	if err != nil {
 		return "", err
 	}
-	return httpPost(url + "set", bytes)
+	return httpPost(url, bytes)
 }
 
-func Get(url string, topic string) (string, error){
+func get(url string, topic string) (string, error){
 	value := struct {
 		Topic string `json:"topic"`
 		Tag string `json:"tag"`
@@ -74,13 +81,32 @@ func Get(url string, topic string) (string, error){
 		return "", err
 	}
 
-	return httpPost(url +"/get", bytes)
+	return httpPost(url, bytes)
 }
 
-func Banner(url string) (string, error) {
-	return httpGet(url + "/banner")
+func banner(url string) (string, error) {
+	return httpGet(url)
 }
 
-func Info(url string) (string, error) {
-	return httpGet(url + "/info")
+func info(url string) (string, error) {
+	return httpGet(url)
+}
+
+
+func GetClient(url string) (HttpClient, error) {
+	client := HttpClient { 
+		Get: func(topic string) (string, error) {
+			return get(url +"/get", topic)
+		},
+		Set: func(topic string, data string) (string, error){
+			return set(url + "/set", topic, data)
+		},
+		Info: func() (string, error){
+			return info(url + "/info")
+		},
+		Banner: func()(string, error){
+			return banner(url + "/banner")
+		},
+	}
+	return client, nil
 }

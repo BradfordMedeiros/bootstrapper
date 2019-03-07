@@ -24,6 +24,7 @@ func main(){
 		panic("Could not read config: " + err.Error())
 	}
 
+	client, _ := httpClient.GetClient(configuration.RemoteServer)
 	switch (options.CommandType) {
 		// Server commands
 		case "serve": { 
@@ -97,7 +98,7 @@ func main(){
 			}
 		}
 		case "set": {
-			resp, err := httpClient.Set(configuration.RemoteServer, options.CommandSet.Key, options.CommandSet.Value)
+			resp, err := client.Set(options.CommandSet.Key, options.CommandSet.Value)
 			if err != nil {
 				os.Exit(2)
 				return
@@ -105,7 +106,7 @@ func main(){
 			fmt.Println(resp)
 		}
 		case "get": {
-			resp, err := httpClient.Get(configuration.RemoteServer, options.CommandGet.Key)
+			resp, err := client.Get(options.CommandGet.Key)
 			if err != nil {
 				os.Exit(2)
 				return
@@ -113,7 +114,7 @@ func main(){
 			fmt.Println(resp)
 		}
 		case "info": {
-			infoResponse, err := httpClient.Info(configuration.RemoteServer)
+			infoResponse, err := client.Info()
 			if err != nil {
 				fmt.Println("error grabbing info: ", err.Error())
 				return
@@ -121,7 +122,7 @@ func main(){
 			fmt.Println(infoResponse)
 		}
 		case "banner": {
-			bannerResponse, err := httpClient.Banner(configuration.RemoteServer)
+			bannerResponse, err := client.Banner()
 			if err != nil {
 				fmt.Println("error grabbing banenr: ", err.Error())
 				return
