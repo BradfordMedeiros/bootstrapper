@@ -18,8 +18,10 @@ install: bootstrapper
 	@echo install placeholder
 	mkdir -p /etc/blacksmith/
 	mv ./build /etc/blacksmith/bootstrapper
+	cp ./bs /usr/bin/bs  # maybe should rename this so wont conflict
 
 uninstall:
 	@echo uninstall placeholder	
 	rm -rf /etc/blacksmith/bootstrapper
 	# should delete blacksmith if that is empty probably todo
+	rm /usr/bin/bs
